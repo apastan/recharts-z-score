@@ -1,0 +1,13 @@
+.root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: calc(100vw);
+  height: calc(100vh);
+}
+
+.chartContainer {
+  width: calc(100vw - 100px);
+  height: calc(100vh - 100px);
+}
