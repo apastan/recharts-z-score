@@ -171,7 +171,10 @@ function App() {
   return (
     <div className={s.root}>
       <h1 className={s.heading}>
-        Надеюсь, что правильно понял, какие участки нужно закрасить красным :))
+        Надеюсь, что правильно понял, какие участки нужно закрасить красным :)){' '}
+        <br />
+        Красное кажется несимметричным из-за графика со сглаживание - ниже
+        другой график, там все ОК
       </h1>
       <>
         <div className={s.chartContainer}>
@@ -263,6 +266,129 @@ function App() {
               />
               <Line
                 type="monotone"
+                dataKey="uv"
+                stroke="url(#gradientUV)"
+                activeDot={(props: unknown) => {
+                  const { cx, cy, index } = props as DotProps
+                  return (
+                    <circle
+                      key={`uv-active-${index}`}
+                      cx={cx}
+                      cy={cy}
+                      r={8}
+                      fill={
+                        dataWithZScore[index].uvIsAnomaly ? 'red' : '#82ca9d'
+                      }
+                    />
+                  )
+                }}
+                dot={({ cx, cy, index }: DotProps) => {
+                  return (
+                    <circle
+                      key={`uv-dot-${index}`}
+                      cx={cx}
+                      cy={cy}
+                      r={4}
+                      fill={
+                        dataWithZScore[index].uvIsAnomaly ? 'red' : '#82ca9d'
+                      }
+                    />
+                  )
+                }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className={s.chartContainer}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              data={dataWithZScore}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <defs>
+                <linearGradient id="gradientUV" x1="0" y1="0" x2="1" y2="0">
+                  {prepareOffsets(
+                    dataWithZScore,
+                    'uv',
+                    uvBreakPoints,
+                    '#82ca9d',
+                    'red'
+                  ).map((point, i) => {
+                    return (
+                      <Fragment key={`uv-stop-${i}`}>
+                        <stop
+                          offset={`${point.offset}%`}
+                          stopColor={point.color}
+                        />
+                      </Fragment>
+                    )
+                  })}
+                </linearGradient>
+
+                <linearGradient id="gradientPV" x1="0" y1="0" x2="1" y2="0">
+                  {prepareOffsets(
+                    dataWithZScore,
+                    'pv',
+                    pvBreakPoints,
+                    '#8884d8',
+                    'red'
+                  ).map((point, i) => {
+                    return (
+                      <Fragment key={`pv-stop-${i}`}>
+                        <stop
+                          offset={`${point.offset}%`}
+                          stopColor={point.color}
+                        />
+                      </Fragment>
+                    )
+                  })}
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line
+                type="linear"
+                dataKey="pv"
+                stroke="url(#gradientPV)"
+                activeDot={(props: unknown) => {
+                  const { cx, cy, index } = props as DotProps
+                  return (
+                    <circle
+                      key={`pv-active-${index}`}
+                      cx={cx}
+                      cy={cy}
+                      r={8}
+                      fill={
+                        dataWithZScore[index].pvIsAnomaly ? 'red' : '#8884d8'
+                      }
+                    />
+                  )
+                }}
+                dot={({ cx, cy, index }: DotProps) => {
+                  return (
+                    <circle
+                      key={`pv-dot-${index}`}
+                      cx={cx}
+                      cy={cy}
+                      r={4}
+                      fill={
+                        dataWithZScore[index].pvIsAnomaly ? 'red' : '#8884d8'
+                      }
+                    />
+                  )
+                }}
+              />
+              <Line
+                type="linear"
                 dataKey="uv"
                 stroke="url(#gradientUV)"
                 activeDot={(props: unknown) => {
