@@ -1,13 +1,19 @@
 .root {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: calc(100vw);
-  height: calc(100vh);
+  max-width: 100%;
+  padding: 0 20px;
 }
 
 .chartContainer {
-  width: calc(100vw - 100px);
-  height: calc(100vh - 100px);
+  width: calc(100%);
+  height: calc(100vh - 120px);
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: 500;
+  text-align: center;
+
+  @media screen and (max-width: 800px) {
+    font-size: 1rem;
+  }
 }
